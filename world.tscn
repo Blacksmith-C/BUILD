@@ -1,0 +1,51 @@
+[gd_scene load_steps=9 format=3 uid="uid://waj28paosscg"]
+
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_faxqi"]
+rayleigh_color = Color(0.137255, 0.192157, 0.470588, 1)
+mie_color = Color(0.996078, 0.980392, 0.87451, 1)
+ground_color = Color(0.278431, 0.368627, 0.682353, 1)
+energy_multiplier = 3.5
+
+[sub_resource type="Sky" id="Sky_lhrr4"]
+sky_material = SubResource("PhysicalSkyMaterial_faxqi")
+
+[sub_resource type="Environment" id="Environment_tb6kg"]
+background_mode = 2
+sky = SubResource("Sky_lhrr4")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_vdmhs"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1nrg7"]
+noise = SubResource("FastNoiseLite_vdmhs")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_guuwy"]
+albedo_color = Color(0.368627, 0.368627, 0.368627, 1)
+albedo_texture = SubResource("NoiseTexture2D_1nrg7")
+
+[sub_resource type="BoxMesh" id="BoxMesh_c1c0n"]
+material = SubResource("StandardMaterial3D_guuwy")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_eqojm"]
+points = PackedVector3Array(0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5)
+
+[node name="World" type="Node3D"]
+
+[node name="Sunlight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.957823, -0.235392, 0.164823, 0, 0.573576, 0.819152, -0.287361, -0.784602, 0.549384, 0, 18.4633, 0)
+light_color = Color(0.984314, 0.929412, 0.552941, 1)
+
+[node name="Sky" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_tb6kg")
+
+[node name="Terrain" type="Node3D" parent="."]
+
+[node name="Voxel" type="Node3D" parent="Terrain"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Terrain/Voxel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 0.5)
+mesh = SubResource("BoxMesh_c1c0n")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Terrain/Voxel/MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Terrain/Voxel/MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_eqojm")
