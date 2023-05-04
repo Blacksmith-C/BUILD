@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://jvu7b5rcutx5"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_vdmhs"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_8m64h"]
+noise = SubResource("FastNoiseLite_vdmhs")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_guuwy"]
+albedo_color = Color(0.368627, 0.368627, 0.368627, 1)
+albedo_texture = SubResource("NoiseTexture2D_8m64h")
+
+[sub_resource type="BoxMesh" id="BoxMesh_c8lw3"]
+material = SubResource("StandardMaterial3D_guuwy")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_f5tq3"]
+points = PackedVector3Array(0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5)
+
+[node name="Voxel" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 0.5)
+mesh = SubResource("BoxMesh_c8lw3")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_f5tq3")

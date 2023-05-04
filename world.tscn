@@ -1,4 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://waj28paosscg"]
+[gd_scene load_steps=13 format=3 uid="uid://waj28paosscg"]
+
+[ext_resource type="PackedScene" uid="uid://cqqclxh5gt434" path="res://Player.tscn" id="1_pln4u"]
+[ext_resource type="Material" uid="uid://bgqwpifr2fquk" path="res://atlas_material.tres" id="2_eehld"]
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_faxqi"]
 rayleigh_color = Color(0.137255, 0.192157, 0.470588, 1)
@@ -13,20 +16,39 @@ sky_material = SubResource("PhysicalSkyMaterial_faxqi")
 background_mode = 2
 sky = SubResource("Sky_lhrr4")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_vdmhs"]
+[sub_resource type="VoxelStreamRegionFiles" id="VoxelStreamRegionFiles_xki24"]
+directory = "res://save"
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1nrg7"]
-noise = SubResource("FastNoiseLite_vdmhs")
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_1okmj"]
+noise_type = 2
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_guuwy"]
-albedo_color = Color(0.368627, 0.368627, 0.368627, 1)
-albedo_texture = SubResource("NoiseTexture2D_1nrg7")
+[sub_resource type="VoxelGeneratorNoise" id="VoxelGeneratorNoise_e3r72"]
+channel = 0
+noise = SubResource("FastNoiseLite_1okmj")
 
-[sub_resource type="BoxMesh" id="BoxMesh_c1c0n"]
-material = SubResource("StandardMaterial3D_guuwy")
+[sub_resource type="VoxelBlockyModel" id="VoxelBlockyModel_j5laq"]
+voxel_name = &"Air"
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_eqojm"]
-points = PackedVector3Array(0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5)
+[sub_resource type="VoxelBlockyModel" id="VoxelBlockyModel_3xutx"]
+voxel_name = &"Stone"
+geometry_type = 1
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 1, 1)])
+cube_geometry_padding_y = null
+cube_tiles_left = Vector2(0, 0)
+cube_tiles_right = Vector2(0, 0)
+cube_tiles_bottom = Vector2(0, 0)
+cube_tiles_top = Vector2(0, 0)
+cube_tiles_back = Vector2(0, 0)
+cube_tiles_front = Vector2(0, 0)
+material_override_0 = ExtResource("2_eehld")
+collision_enabled_0 = true
+
+[sub_resource type="VoxelBlockyLibrary" id="VoxelBlockyLibrary_037ts"]
+voxels/0 = SubResource("VoxelBlockyModel_j5laq")
+voxels/1 = SubResource("VoxelBlockyModel_3xutx")
+
+[sub_resource type="VoxelMesherBlocky" id="VoxelMesherBlocky_kkk38"]
+library = SubResource("VoxelBlockyLibrary_037ts")
 
 [node name="World" type="Node3D"]
 
@@ -39,13 +61,13 @@ environment = SubResource("Environment_tb6kg")
 
 [node name="Terrain" type="Node3D" parent="."]
 
-[node name="Voxel" type="Node3D" parent="Terrain"]
+[node name="Player" parent="." instance=ExtResource("1_pln4u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, 0.5)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Terrain/Voxel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 0.5)
-mesh = SubResource("BoxMesh_c1c0n")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="Terrain/Voxel/MeshInstance3D"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Terrain/Voxel/MeshInstance3D/StaticBody3D"]
-shape = SubResource("ConvexPolygonShape3D_eqojm")
+[node name="VoxelTerrain" type="VoxelTerrain" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -300, 0)
+stream = SubResource("VoxelStreamRegionFiles_xki24")
+generator = SubResource("VoxelGeneratorNoise_e3r72")
+mesher = SubResource("VoxelMesherBlocky_kkk38")
+collision_layer = 3
+collision_mask = 3
