@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://waj28paosscg"]
+[gd_scene load_steps=15 format=3 uid="uid://waj28paosscg"]
 
 [ext_resource type="PackedScene" uid="uid://cqqclxh5gt434" path="res://Player.tscn" id="1_pln4u"]
 [ext_resource type="Material" uid="uid://bgqwpifr2fquk" path="res://atlas_material.tres" id="2_eehld"]
@@ -43,9 +43,37 @@ cube_tiles_front = Vector2(0, 0)
 material_override_0 = ExtResource("2_eehld")
 collision_enabled_0 = true
 
+[sub_resource type="VoxelBlockyModel" id="VoxelBlockyModel_qfbx8"]
+voxel_name = &"Dirt"
+geometry_type = 1
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 1, 1)])
+cube_geometry_padding_y = null
+cube_tiles_left = Vector2(3, 0)
+cube_tiles_right = Vector2(3, 0)
+cube_tiles_bottom = Vector2(3, 0)
+cube_tiles_top = Vector2(3, 0)
+cube_tiles_back = Vector2(3, 0)
+cube_tiles_front = Vector2(3, 0)
+collision_enabled_0 = true
+
+[sub_resource type="VoxelBlockyModel" id="VoxelBlockyModel_ajcrd"]
+voxel_name = &"Grass"
+geometry_type = 1
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 1, 1)])
+cube_geometry_padding_y = null
+cube_tiles_left = Vector2(2, 0)
+cube_tiles_right = Vector2(2, 0)
+cube_tiles_bottom = Vector2(3, 0)
+cube_tiles_top = Vector2(1, 0)
+cube_tiles_back = Vector2(2, 0)
+cube_tiles_front = Vector2(2, 0)
+collision_enabled_0 = true
+
 [sub_resource type="VoxelBlockyLibrary" id="VoxelBlockyLibrary_037ts"]
 voxels/0 = SubResource("VoxelBlockyModel_j5laq")
 voxels/1 = SubResource("VoxelBlockyModel_3xutx")
+voxels/2 = SubResource("VoxelBlockyModel_qfbx8")
+voxels/3 = SubResource("VoxelBlockyModel_ajcrd")
 
 [sub_resource type="VoxelMesherBlocky" id="VoxelMesherBlocky_kkk38"]
 library = SubResource("VoxelBlockyLibrary_037ts")
